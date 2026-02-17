@@ -21,7 +21,7 @@ final CalendarLogic logic = CalendarLogic();
       debugShowCheckedModeBanner: false, // Debug Banner entfernen
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("KalenderrApp"),
+          title: const Text("KalenderApp"),
           centerTitle: true,
           backgroundColor: Colors.blue,
           elevation: 3,
@@ -75,10 +75,19 @@ final CalendarLogic logic = CalendarLogic();
                   itemBuilder: (context, index) { //-----------------------------------------------------------------------------------------
                     int dayText = 0;
                     int daysPrevMonth = logic.getDaysInPrevMonth();
+                    int daysInMonth = logic.getDaysInMonth();
                     int weekDay = logic.getWeekDay();
-                    if(index < weekDay - 1){
+                    int monthIndex = (index + 1) - (weekDay - 1);
+                    bool otherMonth = false;
+                    if(index +1  < weekDay ){
                       dayText = daysPrevMonth - ((weekDay-1) - (index+1));
-                      debugPrint("Wochentag: ${weekDay}");
+                      otherMonth = true;
+                    }else if(monthIndex <= daysInMonth){
+                      dayText = monthIndex;
+                      otherMonth = false;
+                    }else{
+                      dayText = (index + 1) - daysInMonth - (weekDay-1);
+                      otherMonth = true;
                     }
                     
 
@@ -88,7 +97,8 @@ final CalendarLogic logic = CalendarLogic();
                           debugPrint("Tag ${index + 1} gedrückt");
                         },
                         child: Center(
-                          child: Text("${dayText}"),
+                          child: Text("${dayText}",style:TextStyle(color: otherMonth? Colors.red:Colors.black)), //Farbentschiedung
+                          
                         ),
                       ),
                     );
