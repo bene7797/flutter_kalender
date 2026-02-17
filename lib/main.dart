@@ -40,17 +40,21 @@ final CalendarLogic logic = CalendarLogic();
                       IconButton(
                         icon: const Icon(Icons.arrow_back_ios),
                         onPressed: () {
-                          debugPrint("Vorheriger Monat");
+                          setState(() {
+                            logic.jumpMonth(-1);
+                          });
                         },
                       ),
                       Text(
-                        "Februar 2026",
+                        "${logic.getMonthName()} ${logic.focusDate.year}" ,
                         style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       IconButton(
                         icon: const Icon(Icons.arrow_forward_ios),
                         onPressed: () {
-                          debugPrint("Nächster Monat");
+                          setState(() {
+                            logic.jumpMonth(1);
+                          });
                         },
                       ),
                     ],
@@ -100,7 +104,7 @@ final CalendarLogic logic = CalendarLogic();
                             debugPrint("Tag ${index + 1} gedrückt");
                           },
                           child: Center(
-                            child: Text("${dayText}",style:TextStyle(color: otherMonth? Colors.red:Colors.black)), //Farbentschiedung
+                            child: Text("$dayText",style:TextStyle(color: otherMonth? Colors.red:Colors.black)), //Farbentschiedung
                             
                           ),
                         ),
