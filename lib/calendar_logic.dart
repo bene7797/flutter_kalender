@@ -1,42 +1,75 @@
 class CalendarLogic {
-  var focusDate = DateTime.now();
+  DateTime focusDate = DateTime.now();
+  static const daysPerWeek = 7;
+  static const totalCells = 42;
 
-  final List<String> weekDays = ["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
-  final List<String> monthNames = ["Januar","Februar","März","Aprill","Mai","Juni","Juli","August","Septmeber","Oktober","November","Dezember"];
+  final List<String> weekDays = [
+    "Montag",
+    "Dienstag",
+    "Mittwoch",
+    "Donnerstag",
+    "Freitag",
+    "Samstag",
+    "Sonntag",
+  ];
+  final List<String> monthNames = [
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember",
+  ];
 
-  int getDaysInMonth(){
-    return DateTime(focusDate.year,focusDate.month +1,0).day;
+  int getDaysInMonth() {
+    return DateTime(focusDate.year, focusDate.month + 1, 0).day;
   }
 
-  int getDaysInPrevMonth(){
-     return DateTime(focusDate.year,focusDate.month,0).day;
+  int getDaysInPrevMonth() {
+    return DateTime(focusDate.year, focusDate.month, 0).day;
   }
 
-  int getWeekDay(){
-    return DateTime(focusDate.year,focusDate.month,1).weekday;
+  int getWeekDay() {
+    return DateTime(focusDate.year, focusDate.month, 1).weekday;
   }
 
-  void setDate(int year,int month,int day){
-    focusDate = DateTime(year,month,day);
+  String getWeekDayName() {
+    return weekDays[focusDate.weekday - 1];
   }
 
-  void jumpMonth(int months){
-    
+  void setDate(int year, int month, int day) {
+    focusDate = DateTime(year, month, day);
+  }
 
-    if((focusDate.month + months) < 0){
-     setDate(focusDate.year -1, 12, focusDate.day);
-    }else  if((focusDate.month + months) > 12){
-      setDate(focusDate.year +1, 1, focusDate.day);
-    }else{
-      setDate(focusDate.year,focusDate.month+months, focusDate.day);
+  void jumpMonth(int months) {
+    int newYear = focusDate.year;
+    int newMonth = focusDate.month + months;
+
+    if (newMonth < 1) {
+      newMonth = 12;
+      newYear--;
+    } else if (newMonth > 12) {
+      newMonth = 1;
+      newYear++;
     }
-   
-    
 
-    
+    setDate(newYear, newMonth, 1);
   }
 
-  String getMonthName(){
-    return monthNames[focusDate.month -1];
+  String getMonthName() {
+    return monthNames[focusDate.month - 1];
+  }
+
+  String getDayText() {
+    String text =
+        'Heute ist ${getWeekDayName()} der ${focusDate.day} ${getMonthName()}';
+
+    return text;
   }
 }

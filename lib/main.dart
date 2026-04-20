@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kalender/calendar_logic.dart';
+import 'package:flutter_kalender/calender_widget.dart';
+
+import 'package:flutter_kalender/history_widget.dart';
 
 void main() {
   runApp(const KalenderApp());
@@ -13,110 +16,47 @@ class KalenderApp extends StatefulWidget {
 }
 
 class _KalenderAppState extends State<KalenderApp> {
-final CalendarLogic logic = CalendarLogic();
+  final CalendarLogic logic = CalendarLogic();
+  int _selectedIndex = 0; // Kalender als Standardseite
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [
+      CalendarBody(logic: logic),
+      HistoryPage(logic: logic),
+    ];
+
     return MaterialApp(
-      debugShowCheckedModeBanner: false, // Debug Banner entfernen
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text("KalenderApp"),
           centerTitle: true,
           backgroundColor: Colors.blue,
-          elevation: 3,
-          shadowColor: Colors.black, 
         ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                // Monat Jahr und buttons
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios),
-                        onPressed: () {
-                          setState(() {
-                            logic.jumpMonth(-1);
-                          });
-                        },
-                      ),
-                      Text(
-                        "${logic.getMonthName()} ${logic.focusDate.year}" ,
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.arrow_forward_ios),
-                        onPressed: () {
-                          setState(() {
-                            logic.jumpMonth(1);
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+        body: Row(
+          children: [
+            NavigationRail(
+              selectedIndex: _selectedIndex,
+              onDestinationSelected: (int index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+              destinations: const [
+                NavigationRailDestination(
+                  icon: Icon(Icons.calendar_month),
+                  label: Text("Kalender"),
                 ),
-          
-                // 2. Wochentage
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
-                      .map((day) => Text(day, style: TextStyle(fontWeight: FontWeight.bold)))
-                      .toList(),
+                NavigationRailDestination(
+                  icon: Icon(Icons.history_edu),
+                  label: Text("Historie"),
                 ),
-          
-                // 3. Kalender Grid
-              
-                  GridView.builder(
-                    shrinkWrap: true, 
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(8.0),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 7, // 7 Tage pro Woche
-                    ),
-                    itemCount: 42, // Anzahl der anzeigbaren Tage 
-                    itemBuilder: (context, index) { //-----------------------------------------------------------------------------------------
-                      int dayText = 0;
-                      int daysPrevMonth = logic.getDaysInPrevMonth();
-                      int daysInMonth = logic.getDaysInMonth();
-                      int weekDay = logic.getWeekDay();
-                      int monthIndex = (index + 1) - (weekDay - 1);
-                      bool otherMonth = false;
-                      if(index +1  < weekDay ){
-                        dayText = daysPrevMonth - ((weekDay-1) - (index+1));
-                        otherMonth = true;
-                      }else if(monthIndex <= daysInMonth){
-                        dayText = monthIndex;
-                        otherMonth = false;
-                      }else{
-                        dayText = (index + 1) - daysInMonth - (weekDay-1);
-                        otherMonth = true;
-                      }
-                      
-          
-                      return Card(
-                        child: InkWell( // Feld klickbar
-                          onTap: () {
-                            debugPrint("Tag ${index + 1} gedrückt");
-                          },
-                          child: Center(
-                            child: Text("$dayText",style:TextStyle(color: otherMonth? Colors.red:Colors.black)), //Farbentschiedung
-                            
-                          ),
-                        ),
-                      );
-                      //-------------------------------------------------------------------------------------------------------------------------
-                    },
-                  ),
-                  
-               
               ],
             ),
-          ),
+            const VerticalDivider(thickness: 1, width: 1),
+            Expanded(child: pages[_selectedIndex]),
+          ],
         ),
       ),
     );
