@@ -32,12 +32,13 @@ class _KalenderAppState extends State<KalenderApp> {
         appBar: AppBar(
           title: const Text("Kalender"),
           centerTitle: true,
-          backgroundColor: Colors.blue,
+          backgroundColor: const Color.fromARGB(187, 49, 162, 255),
         ),
         body: Row(
           children: [
             NavigationRail(
               selectedIndex: _selectedIndex,
+              labelType: NavigationRailLabelType.all,
               onDestinationSelected: (int index) {
                 setState(() {
                   _selectedIndex = index;
@@ -54,7 +55,7 @@ class _KalenderAppState extends State<KalenderApp> {
                 ),
               ],
             ),
-            const VerticalDivider(thickness: 1, width: 1),
+            const VerticalDivider(thickness: 3, width: 1),
             Expanded(child: pages[_selectedIndex]),
           ],
         ),
