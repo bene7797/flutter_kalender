@@ -55,6 +55,7 @@ class _HistoryPageState extends State<HistoryPage> {
         },
       );
 
+      //200 = OK response
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
@@ -63,18 +64,19 @@ class _HistoryPageState extends State<HistoryPage> {
         });
       } else {
         setState(() {
-          errorMessage = 'Fehler beim Laden: ${response.statusCode}';
+          errorMessage = 'Serverantwort: ${response.statusCode}';
           isLoading = false;
         });
       }
     } catch (e) {
       setState(() {
-        errorMessage = 'Netzwerkfehler: $e';
+        errorMessage = 'Fehler: $e';
         isLoading = false;
       });
     }
   }
 
+  //Kleiner Infotext über den Tag
   String buildDateText() {
     final date = widget.logic.focusDate;
     final weekday = widget.logic.getWeekDayName();

@@ -3,9 +3,7 @@ import 'package:flutter_kalender/calendar_logic.dart';
 
 class CalendarBody extends StatefulWidget {
   final CalendarLogic logic;
-  final VoidCallback? onDateChanged;
-
-  const CalendarBody({super.key, required this.logic, this.onDateChanged});
+  const CalendarBody({super.key, required this.logic});
 
   @override
   State<CalendarBody> createState() => _CalendarBodyState();
@@ -52,6 +50,7 @@ class _CalendarBodyState extends State<CalendarBody> {
             ),
           ),
 
+          //Oberste Überschriftreihe für die Tage zeichnen
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
@@ -66,7 +65,8 @@ class _CalendarBodyState extends State<CalendarBody> {
 
           GridView.builder(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+            physics:
+                const NeverScrollableScrollPhysics(), //Scrollen innherlab des Widgets deaktiviert, da es schon im singlechildscrollview ist
             padding: const EdgeInsets.all(8.0),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 7,
@@ -76,13 +76,14 @@ class _CalendarBodyState extends State<CalendarBody> {
               int dayText = 0;
               int daysPrevMonth = widget.logic.getDaysInPrevMonth();
               int daysInMonth = widget.logic.getDaysInMonth();
-              int weekDay = widget.logic.getWeekDay();
+              int weekDay = widget.logic.getWeekDayOfFirstMonthDay();
               int monthIndex = (index + 1) - (weekDay - 1);
 
               bool otherMonth = false;
               bool prevMonthDay = false;
               bool nextMonthDay = false;
 
+              //Tage des vorherigen, dann aktuellen und dann des nächsten Monats berechnen
               if (index + 1 < weekDay) {
                 dayText = daysPrevMonth - ((weekDay - 1) - (index + 1));
                 otherMonth = true;
@@ -115,7 +116,7 @@ class _CalendarBodyState extends State<CalendarBody> {
                           year++;
                         }
                       }
-
+                      //Datum mit Monat und Jahr aktualisieren, falls Datum außerhalb des fokussierten Monats angeklickt wurde
                       widget.logic.setDate(year, month, dayText);
                     });
                   },
@@ -131,8 +132,6 @@ class _CalendarBodyState extends State<CalendarBody> {
               );
             },
           ),
-
-          Text(widget.logic.getDayText()),
         ],
       ),
     );
