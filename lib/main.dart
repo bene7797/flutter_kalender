@@ -38,7 +38,8 @@ class _KalenderAppState extends State<KalenderApp> {
           children: [
             NavigationRail(
               selectedIndex: _selectedIndex,
-              labelType: NavigationRailLabelType.all,
+              labelType:
+                  NavigationRailLabelType.all, //Damit Labels angezeigt werden
               onDestinationSelected: (int index) {
                 setState(() {
                   _selectedIndex = index;
