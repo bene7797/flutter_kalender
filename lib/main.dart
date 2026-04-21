@@ -30,7 +30,7 @@ class _KalenderAppState extends State<KalenderApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("KalenderApp"),
+          title: const Text("Kalender"),
           centerTitle: true,
           backgroundColor: Colors.blue,
         ),
@@ -50,7 +50,7 @@ class _KalenderAppState extends State<KalenderApp> {
                 ),
                 NavigationRailDestination(
                   icon: Icon(Icons.history_edu),
-                  label: Text("Historie"),
+                  label: Text("Historische Ereignisse"),
                 ),
               ],
             ),
